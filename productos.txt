@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "title": "Gaseosa",
+    "precio": 80,
+    "thumbnail": "https://www.clubmarket.com.ar/wp-content/uploads/coca-cola-pet-x-2.5l.jpg"
+  },
+  {
+    "id": 2,
+    "title": "Agua Mineral",
+    "precio": 60,
+    "thumbnail": "https://carrefourar.vtexassets.com/arquivos/ids/171888/7790315000446_02.jpg?v=637468542321600000"
+  },
+  {
+    "id": 3,
+    "title": "Masitas Cachafaz",
+    "precio": 60,
+    "thumbnail": "https://jumboargentina.vtexassets.com/arquivos/ids/192626-800-600?v=636383534302570000&width=800&height=600&aspect=true"
+  }
+]
