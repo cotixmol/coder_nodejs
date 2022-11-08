@@ -1,3 +1,7 @@
+const Contenedor = require("./class")
+const handlebars = require("express-handlebars")
+const path = require("path")
+
 /* CONFIGURACION SERVIDOR */
 const express = require("express");
 const app = express();
@@ -13,76 +17,21 @@ app.use(express.static("public"));
 const productsRouter = express.Router();
 app.use("/api/productos",productsRouter)
 
+/* CONFIGURACIÓN HANDLEBARS */
+app.engine("handlebars",handlebars.engine())
+
+const viewFolder = path.join(__dirname,"views")
+app.set("views",viewFolder)
+
+app.set("view engine", "handlebars")
+
 /* FUNCIONALIDAD SERVIDOR */
-class Contenedor{
-
-    static id=0;
-    static productsList = [];
-    constructor(){
-    }
-
-    save(product){
-        try{
-            Contenedor.id++
-            Contenedor.productsList.push({id:Contenedor.id,...product})
-        }catch{
-            return Error("Error en Contenedor.save(object)")
-        }
-    }
-
-    update(product,id){
-        try{
-            Contenedor.productsList.push({id:id,...product})
-        }catch{
-            return Error("Error en Contenedor.update(product,id)")
-        }
-    }
-
-    sort(){
-        Contenedor.productsList.sort((a,b)=>{
-            if(a.id>b.id){
-                return 1
-            }
-            if(a.id<b.id){
-                return -1
-            }
-        })
-    }
-
-    getById(id){
-        try{
-            const productObj = Contenedor.productsList.filter(elm=>elm.id==id)
-            return productObj
-        }catch{
-            return Error("Error en Contenedor.getById(id)")
-        }
-    }
-
-    getAll(){
-        try{
-            return Contenedor.productsList;
-        }catch{
-            return Error("Error in Contenedor.getAll()")
-        }
-    }
-
-    deleteById(id){
-        try{
-            const productsArrayDeletedId = Contenedor.productsList.filter((elm)=>elm.id != id)
-            Contenedor.productsList = productsArrayDeletedId;
-        }catch{
-            return Error("Error en Contenedor.deleteById(id)")
-        }
-    }
-
-    deleteAll(){
-        Contenedor.productsList = [];
-    }
-}
-
 let products = new Contenedor;
 
 /* RUTAS SERVIDOR */
+app.get("/",(req,res)=>{
+    res.render("form")
+})
 productsRouter.get("/",(req,res)=>{
     res.send(products.getAll())
 })
