@@ -37,7 +37,7 @@ app.get("/",(req,res)=>{
 app.get("/productos",async (req,res)=>{
     if(await productList==false){
         res.render("products",{
-            error:"No hay productos",
+            error:"Nothing Yet",
             image:'<img src="images/nothingList.svg" alt="nothing in the list">'
         })
     }else{
