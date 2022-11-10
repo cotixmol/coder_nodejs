@@ -1,3 +1,18 @@
 <div>
-    <h2>Hola</h2>
+    <div class="nothingListContainer">
+        {{{image}}}
+        <p>{{error}}</p>
+    </div>
+    {{#each products}}
+    <div class="productsListContainer">
+        <img src={{this.thumbnail}} alt={{this.name}}>
+        <div class="detailsListContainer">
+            <p>{{this.name}}</p>
+            <p>{{this.price}}</p>
+        </div>
+    </div>
+    <div class="separateLineContainer">
+        <div class="separateLine"></div>
+    </div>
+    {{/each}}
 </div>

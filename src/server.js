@@ -28,19 +28,24 @@ app.set("view engine", "handlebars")
 let products = new Contenedor;
 
 /* RUTAS TEMPLATES */
+productList=products.getAll();
+
 
 app.get("/",(req,res)=>{
     res.render("form")
 })
-
-app.get("/products",(req,res)=>{
-
-    res.render("products")
+app.get("/products",async (req,res)=>{
+    if(await productList==false){
+        res.render("products",{
+            error:"No hay productos",
+            image:'<img src="images/nothingList.svg" alt="nothing in the list">'
+        })
+    }else{
+        res.render("products",{
+            products:productList
+        })
+    }
 })
-
-
-
-
 
 /* RUTAS API */
 productsRouter.get("/",(req,res)=>{
