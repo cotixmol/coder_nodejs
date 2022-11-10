@@ -34,7 +34,7 @@ productList=products.getAll();
 app.get("/",(req,res)=>{
     res.render("form")
 })
-app.get("/products",async (req,res)=>{
+app.get("/productos",async (req,res)=>{
     if(await productList==false){
         res.render("products",{
             error:"No hay productos",
