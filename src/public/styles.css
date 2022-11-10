@@ -1,0 +1,34 @@
+@import url('https://fonts.googleapis.com/css2?family=Mulish:wght@200;300;400;500;600;700;800;900;1000&display=swap');
+body{
+    background-color: #ffb40c;
+    font-family: 'Mulish', sans-serif;
+}
+
+.containerNavSup{
+    padding-left: 3vw;
+    display:flex;
+    align-items: center;
+    justify-content: left;
+
+}
+.divFormContainer{
+    padding:5vw;
+}
+.containerNavInf{
+    padding-left: 3vw;
+}
+.navInfText{
+    font-size: small;
+}
+
+/* Personalización pantalla de mas de 600px de ancho */
+@media only screen and (min-width: 600px) {
+    .divFormContainer {
+        display:flex;
+        justify-content: center;
+    }
+    .formAddProduct{
+        width: 65vw;
+    }
+  }
+

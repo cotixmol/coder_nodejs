@@ -1,5 +1,5 @@
 const Contenedor = require("./class")
-const handlebars = require("express-handlebars")
+const exhbs = require("express-handlebars")
 const path = require("path")
 
 /* CONFIGURACION SERVIDOR */
@@ -8,30 +8,41 @@ const app = express();
 const PORT = 8080;
 app.listen(PORT,()=>console.log(`Servidor ON. Puerto ${PORT}`))
 
+//Interpreta forms con metodos post
 app.use(express.urlencoded({extended:true}));
 app.use(express.json());
-
-app.use(express.static("public"));
 
 /* CONFIGURACIÓN ROUTER */
 const productsRouter = express.Router();
 app.use("/api/productos",productsRouter)
 
 /* CONFIGURACIÓN HANDLEBARS */
-app.engine("handlebars",handlebars.engine())
+app.engine("handlebars",exhbs.engine({defaultLayout:"main"}))
+app.use(express.static("public"));
 
 const viewFolder = path.join(__dirname,"views")
 app.set("views",viewFolder)
-
 app.set("view engine", "handlebars")
 
 /* FUNCIONALIDAD SERVIDOR */
 let products = new Contenedor;
 
-/* RUTAS SERVIDOR */
+/* RUTAS TEMPLATES */
+
 app.get("/",(req,res)=>{
     res.render("form")
 })
+
+app.get("/products",(req,res)=>{
+
+    res.render("products")
+})
+
+
+
+
+
+/* RUTAS API */
 productsRouter.get("/",(req,res)=>{
     res.send(products.getAll())
 })
@@ -44,9 +55,9 @@ productsRouter.post("/",(req,res)=>{
     const productObject = req.body;
     if (productObject.name && productObject.price && productObject.thumbnail){
         products.save(productObject);
-        res.send({"exito":"producto agregado"})
+        res.redirect("/")
     }else{
-        res.send({"error":"faltan campos o estan erroneos (name, price, thumbnail)"})
+        res.send({error:"faltan campos o estan erroneos (name, price, thumbnail)"})
     }
 })
 productsRouter.put("/:id", async (req,res)=>{
