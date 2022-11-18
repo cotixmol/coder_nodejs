@@ -9,7 +9,8 @@ const PORT = process.env.PORT || 8080;
 const server = app.listen(PORT,()=>console.log(`Servidor ON en puerto ${PORT}`));
 app.use(express.static("public"));
 /* CONFIGURACIÓN WEBSOCKETS */
-const { Server } = require("socket.io")
+const { Server } = require("socket.io");
+const { productsList } = require("./class");
 const io = new Server(server)
 /* CONFIGURACIÓN PARA QUE FUNCIONE FORMULARIO Y JSON */
 app.use(express.urlencoded({extended:true}));
@@ -29,17 +30,27 @@ app.set("view engine", "handlebars")
 let products = new Contenedor;
 
 /* LISTA DE TODOS LOS PRODUCTOS */
-productList=products.getAll();
+let productList=products.getAll();
 
 /* WEBSOCKET SETUP */
+let productsListWS=[]
+
 io.on("connection",(socket)=>{
-    console.log("Probando");
+    console.log(socket.id)
+    io.sockets.emit("productListToCliente",productsList)
+    socket.on("productsListToServer",(data)=>{
+        console.log(data)
+        productsListWS.push(data)
+    })
 })
 
 /* RUTAS DEL TEMPLATE CON RENDER DE VARIABLES */
 //Template del formulario
 app.get("/",(req,res)=>{
-    res.render("form")
+    console.log(productsListWS)
+    res.render("form",{
+        products:productsListWS
+    })
 })
 //Template de los productos
 app.get("/productos",async (req,res)=>{

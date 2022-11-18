@@ -79,3 +79,24 @@ body{
     width: 35vh;
 }
 
+/* FORM WS BLOCK */
+
+#divProductListWSContainer{
+    display:flex;
+    height: 10vh;
+    margin: 2vh;
+}
+.productListBlockWSImage{
+    height:10vh;
+    width: 10vh;
+    object-fit: contain;
+    height: 100%;
+    border: 2px solid #732178;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+.productListBlockWSText{
+    margin-left:10vw;
+    color:#732178;
+    font-size: 1.3em;
+}

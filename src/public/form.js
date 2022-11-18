@@ -1,6 +1,21 @@
 console.log("Form.js funciona")
-
 const socket = io();
 
-socket.on()
-socket.emit()
+let divProductListWSOuterContainer = document.getElementById("divProductListWSOuterContainer")
+
+socket.on("productListToCliente",(data)=>{
+    let productListBlockWS = ""
+    data.forEach(elm => {
+        productListBlockWS +=   `<div id="divProductListWSContainer">
+                                    <img class="productListBlockWSImage" src=${elm.thumbnail} alt="Producto"></img>
+                                    <div class="productListBlockWSText">
+                                        <p>${elm.name}</p>
+                                        <p>$${elm.price}</p>
+                                    </div>
+                                </div>`
+    });
+
+    divProductListWSOuterContainer.innerHTML= productListBlockWS
+})
+
+
