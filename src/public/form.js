@@ -1,3 +1,5 @@
+/* FUNCIONALIDAD LISTA HECHA CON WEB SOCKETS */
+
 console.log("Form.js funciona")
 const socket = io();
 
@@ -22,4 +24,6 @@ socket.on("productListToCliente",(data)=>{
     divProductListWSOuterContainer.innerHTML= productListTitleWS + productListBlockWS
 })
 
+
+/* FUNCIONALIDAD CHAT HECHO CON WEB SOCKETS */
 

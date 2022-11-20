@@ -12,7 +12,9 @@ body{
 
 }
 .divFormContainer{
-    padding:5vw;
+    padding-top:2vh;
+    padding-left:5vw;
+    padding-right:5vw;
 }
 .containerNavInf{
     padding-left: 3vw;
@@ -110,17 +112,33 @@ body{
 }
 .productListTitleWS{
     margin-left: 2vh;
-
+    margin-top:2vh;
     font-size: 1.3em;
     color:#732178;
 }
 
 @media only screen and (min-width: 600px) {
-    #divProductListWSContainer{
+    #divProductListWSContainer,.productListTitleWS{
         margin-left: 17.5vw;
         margin-right: 17.5vw;
     }
-    .productListTitleWS{
-        margin-left: 17.5vw;
-    }
+  }
+
+  /* CHAT WS STYLE */
+
+  .divChatContainer{
+    position: fixed;
+    bottom: 45px;
+    right: 0;
+    width: 100%;
+  }
+  .chatMessagesContainer{
+    height: 20vh;
+    border: #732178 1px solid;
+    border-radius: 10px;
+    margin-bottom: 1vh;
+  }
+  .inputMail,.inputMessage{
+    margin-bottom: 1vh;
+    border-color: #732178;
   }
