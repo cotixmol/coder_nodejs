@@ -4,7 +4,7 @@ const socket = io();
 let divProductListWSOuterContainer = document.getElementById("divProductListWSOuterContainer")
 
 socket.on("productListToCliente",(data)=>{
-    let productListBlockWS = ""
+    let productListBlockWS = "";
     data.forEach(elm => {
         productListBlockWS +=   `<div id="divProductListWSContainer">
                                     <img class="productListBlockWSImage" src=${elm.thumbnail} alt="Producto"></img>
@@ -14,8 +14,12 @@ socket.on("productListToCliente",(data)=>{
                                     </div>
                                 </div>`
     });
+    
+    let productListTitleWS = "";
 
-    divProductListWSOuterContainer.innerHTML= productListBlockWS
+    if (productListBlockWS!=="") {productListTitleWS="<p class='productListTitleWS'>Added products</p>"}
+
+    divProductListWSOuterContainer.innerHTML= productListTitleWS + productListBlockWS
 })
 
 

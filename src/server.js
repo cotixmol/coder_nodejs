@@ -36,10 +36,8 @@ let productList=products.getAll();
 let productsListWS=[]
 
 io.on("connection",(socket)=>{
-    console.log(socket.id)
     io.sockets.emit("productListToCliente",productsList)
     socket.on("productsListToServer",(data)=>{
-        console.log(data)
         productsListWS.push(data)
     })
 })

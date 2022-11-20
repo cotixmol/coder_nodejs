@@ -83,20 +83,34 @@ body{
 
 #divProductListWSContainer{
     display:flex;
-    height: 10vh;
+    height: 5vh;
     margin: 2vh;
+    border: #732178 1px solid;
+    border-radius: 9px 0 0 9px;
 }
 .productListBlockWSImage{
-    height:10vh;
-    width: 10vh;
+    height:5vh;
+    width: 5vh;
     object-fit: contain;
     height: 100%;
-    border: 2px solid #732178;
-    border-radius: 10px;
+    border-right: 1px solid #732178;
+    border-radius: 10px 0 0 10px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 .productListBlockWSText{
-    margin-left:10vw;
-    color:#732178;
+    display:flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    padding:2vh;
+    padding-top: 3vh;
+    color:#ffb40c;
+    background-color:#732178;
+    font-size: 1em;
+}
+.productListTitleWS{
+    margin: 2vh;
+
     font-size: 1.3em;
+    color:#732178;
 }
