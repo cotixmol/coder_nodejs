@@ -109,8 +109,18 @@ body{
     font-size: 1em;
 }
 .productListTitleWS{
-    margin: 2vh;
+    margin-left: 2vh;
 
     font-size: 1.3em;
     color:#732178;
 }
+
+@media only screen and (min-width: 600px) {
+    #divProductListWSContainer{
+        margin-left: 17.5vw;
+        margin-right: 17.5vw;
+    }
+    .productListTitleWS{
+        margin-left: 17.5vw;
+    }
+  }
