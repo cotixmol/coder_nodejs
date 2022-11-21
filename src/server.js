@@ -1,4 +1,4 @@
-const Contenedor = require("./class")
+const {Contenedor,Chat} = require("./class")
 const exhbs = require("express-handlebars")
 const path = require("path")
 
@@ -10,7 +10,6 @@ const server = app.listen(PORT,()=>console.log(`Servidor ON en puerto ${PORT}`))
 app.use(express.static("public"));
 /* CONFIGURACIÓN WEBSOCKETS */
 const { Server } = require("socket.io");
-const { productsList } = require("./class");
 const io = new Server(server)
 /* CONFIGURACIÓN PARA QUE FUNCIONE FORMULARIO Y JSON */
 app.use(express.urlencoded({extended:true}));
@@ -26,17 +25,19 @@ app.set("view engine", "handlebars")
 
 /* -------------------------------------------------------------------- */
 
-/* CLASE DE PRODUCTOS */
+/* INSTANCIACIÓN DE CLASE DE PRODUCTOS */
 let products = new Contenedor;
 
-/* LISTA DE TODOS LOS PRODUCTOS */
-let productList=products.getAll();
+/* ARRAYS CON VARIABLES ESTATICAS DE LA CLASE */
+let productList= Contenedor.productsList;
+let messagesList = Chat.messagesList;
 
 /* WEBSOCKET SETUP */
 let productsListWS=[]
 
 io.on("connection",(socket)=>{
-    io.sockets.emit("productListToCliente",productsList)
+    io.sockets.emit("productListToClient",productList)
+    io.sockets.emit("messagesListToClient",messagesList)
     socket.on("productsListToServer",(data)=>{
         productsListWS.push(data)
     })
@@ -45,7 +46,6 @@ io.on("connection",(socket)=>{
 /* RUTAS DEL TEMPLATE CON RENDER DE VARIABLES */
 //Template del formulario
 app.get("/",(req,res)=>{
-    console.log(productsListWS)
     res.render("form",{
         products:productsListWS
     })

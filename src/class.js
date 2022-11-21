@@ -64,6 +64,14 @@ class Contenedor{
     }
 }
 
+class Chat{
+    static messagesList=[];
+
+    getAllMessages(){
+        return Chat.messagesList;
+    }
 
 
-module.exports = Contenedor
+}
+
+ module.exports= {Contenedor, Chat}
