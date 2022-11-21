@@ -1,4 +1,4 @@
-const {Contenedor,Chat} = require("./class")
+const {Contenedor, Chat} = require("./class")
 const exhbs = require("express-handlebars")
 const path = require("path")
 
@@ -27,19 +27,24 @@ app.set("view engine", "handlebars")
 
 /* INSTANCIACIÓN DE CLASE DE PRODUCTOS */
 let products = new Contenedor;
+const chat = new Chat
 
 /* ARRAYS CON VARIABLES ESTATICAS DE LA CLASE */
 let productList= Contenedor.productsList;
-let messagesList = Chat.messagesList;
 
 /* WEBSOCKET SETUP */
 let productsListWS=[]
 
 io.on("connection",(socket)=>{
+    //Products
     io.sockets.emit("productListToClient",productList)
-    io.sockets.emit("messagesListToClient",messagesList)
     socket.on("productsListToServer",(data)=>{
         productsListWS.push(data)
+    })
+    //Chat
+    socket.on("message",(data)=>{
+        chat.addMessage(data)
+        io.sockets.emit("messagesListToClient",Chat.messagesList)
     })
 })
 

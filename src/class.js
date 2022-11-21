@@ -1,3 +1,4 @@
+
 class Contenedor{
 
     static id=0;
@@ -67,11 +68,9 @@ class Contenedor{
 class Chat{
     static messagesList=[];
 
-    getAllMessages(){
-        return Chat.messagesList;
+    addMessage(message){
+        Chat.messagesList.push(message)
     }
-
-
 }
 
- module.exports= {Contenedor, Chat}
+ module.exports= {Contenedor, Chat};
