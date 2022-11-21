@@ -27,6 +27,7 @@ socket.on("productListToClient",(data)=>{
 
 
 const chatForm = document.getElementById("chatForm")
+const chatMessagesContainer = document.getElementById("chatMessagesContainer")
 
 chatForm.addEventListener("submit",(e)=>{
     e.preventDefault();
@@ -42,16 +43,19 @@ chatForm.addEventListener("submit",(e)=>{
 })
     
 socket.on("messagesListToClient",(data)=>{
-    console.log(data)
+    let chatMessagesBlock = "";
+    data.forEach((elm)=>{
+        chatMessagesBlock += `<div class="divChatMessagesBlockContainer">
+                                <p class="chatDate">${elm.date}<p>
+                                <p class="chatUser">${elm.user}</p>
+                              </div>
+                                <p class="chatText">${elm.text}</p>`
+
+    })
+    chatMessagesContainer.innerHTML = chatMessagesBlock
+
 })
 
 
-
-// socket.on("chatClass",(chatClass)=>{
-//     chatClass.addMessage(message)
-// })
-// socket.on("messagesListToClient",(data)=>{
-//     console.log(data)
-// })
 
 
