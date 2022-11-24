@@ -1,10 +1,7 @@
-
 class Contenedor{
 
     static id=0;
     static productsList = [];
-    constructor(){
-    }
 
     save(product){
         try{
@@ -59,18 +56,10 @@ class Contenedor{
             return Error("Error en Contenedor.deleteById(id)")
         }
     }
-
+ 
     deleteAll(){
         Contenedor.productsList = [];
     }
 }
 
-class Chat{
-    static messagesList=[];
-
-    addMessage(message){
-        Chat.messagesList.push(message)
-    }
-}
-
- module.exports= {Contenedor, Chat};
+ module.exports= {Contenedor};

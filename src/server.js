@@ -1,23 +1,35 @@
-const {Contenedor, Chat} = require("./class")
+/* IMPORTACIÓN CLASES */
+const {Contenedor} = require("./classes/Contenedor")
+const {Chat} = require("./classes/Chat")
+/* IMPORTACIÓN SERVIDORES */
+const express = require("express");
+const { Server } = require("socket.io");
+/* IMPORTACIÓN OTROS MODULOS */
 const exhbs = require("express-handlebars")
 const path = require("path")
 
 /* CONFIGURACION SERVIDOR */
-const express = require("express");
 const app = express();
 const PORT = process.env.PORT || 8080;
 const server = app.listen(PORT,()=>console.log(`Servidor ON en puerto ${PORT}`));
+
+/* CARPETA ARCHIVOS ESTATICOS */
 app.use(express.static("public"));
+
 /* CONFIGURACIÓN WEBSOCKETS */
-const { Server } = require("socket.io");
 const io = new Server(server)
-/* CONFIGURACIÓN PARA QUE FUNCIONE FORMULARIO Y JSON */
+
+/* CONFIGURACIÓN CORRER FORMS Y JSON */
 app.use(express.urlencoded({extended:true}));
 app.use(express.json());
-/* CONFIGURACIÓN ROUTER */
+
+/* CONFIGURACIÓN ROUTERS */
 const productsRouter = express.Router();
+const cartRouter = express.Router();
 app.use("/api/productos",productsRouter)
-/* CONFIGURACIÓN HANDLEBARS */
+app.use("/api/carrito",cartRouter)
+
+/* CONFIGURACIÓN TEMPLATE ENGINE Y HANDLEBARS */
 app.engine("handlebars",exhbs.engine({defaultLayout:"main"}))
 const viewFolder = path.join(__dirname,"views")
 app.set("views",viewFolder)
@@ -25,7 +37,7 @@ app.set("view engine", "handlebars")
 
 /* -------------------------------------------------------------------- */
 
-/* INSTANCIACIÓN DE CLASE DE PRODUCTOS */
+/* INSTANCIACIÓN DE CLASES */
 let products = new Contenedor;
 const chat = new Chat
 
@@ -36,26 +48,24 @@ let productList= Contenedor.productsList;
 let productsListWS=[]
 
 io.on("connection",(socket)=>{
-    //Products
+    /* FUNCIONALIDAD DE VISTA DE PRODUCTOS CON WEBSOCKETS */
     io.sockets.emit("productListToClient",productList)
-    socket.on("productsListToServer",(data)=>{
-        productsListWS.push(data)
-    })
-    //Chat
+
+    /* FUNCIONALIDAD CHAT HECHO CON WEB SOCKETS */
     socket.on("message",(data)=>{
         chat.addMessage(data)
         io.sockets.emit("messagesListToClient",Chat.messagesList)
     })
 })
 
-/* RUTAS DEL TEMPLATE CON RENDER DE VARIABLES */
-//Template del formulario
+/* RUTAS APLICACIÓN CON RENDERIZADO DEL MOTOR DE PLANTILLAS */
+
+/* PLANTILLA FORMULARIO */
 app.get("/",(req,res)=>{
-    res.render("form",{
-        products:productsListWS
-    })
+    res.render("form")
 })
-//Template de los productos
+
+/* PLANTILLA PRODUCTOS */
 app.get("/productos",async (req,res)=>{
     if(await productList==false){
         res.render("products",{
@@ -69,56 +79,78 @@ app.get("/productos",async (req,res)=>{
     }
 })
 
-/* RUTAS DE LA API */
-//Api con todos los productos.
+/* RUTAS DE LA API DEL ROUTER DE CARRITO  */
+
+/* RUTAS DE LA API DEL ROUTER DE PRODUCTOS  */
+/* GET() TODOS LOS PRODUCTOS */
 productsRouter.get("/",(req,res)=>{
     res.send(products.getAll())
 })
-//Api con el producto por id.
+
+/* GET() PRODUCTO DADO UN ID */
 productsRouter.get("/:id",(req,res)=>{
     let id = parseInt(req.params.id);
     product = products.getById(id);
-    product == false ? res.send({"error": "No hay producto"}) : res.send(product);
+
+    product == false ? 
+    res.send({"error": "Product does not exist"}) :
+    res.send(product);
 })
-//Api con el envio del formulario
+
+/* POST() NUEVO PRODUCTO */
 productsRouter.post("/",(req,res)=>{
-    const productObject = req.body;
-    if (productObject.name && productObject.price && productObject.thumbnail){
-        products.save(productObject);
-        res.redirect("/")
+    const newProductObject = req.body;
+
+    if (newProductObject.name &&
+        newProductObject.price &&
+        newProductObject.thumbnail){
+        products.save(newProductObject);
+        res.redirect("/");
+
     }else{
-        res.send({error:"faltan campos o estan erroneos (name, price, thumbnail)"})
+        res.send({error:"Some of the fields are empty or wrong"})
+
     }
 })
-//Api para el reemplazo de productos por id.
+
+/* PUT() EDITAR PRODUCTO POR ID */
 productsRouter.put("/:id", async (req,res)=>{
     const id = parseInt(req.params.id);
-    const productObject = req.body;
+    const editProductObject = req.body;
 
     if (products.getById(id) == false){
-        res.send({"error": "No hay producto para actualizar"})
+        res.send({"error": "No hay producto para actualizar"});
+
     }else{
-        if (productObject.name && productObject.price && productObject.thumbnail){
+        if (editProductObject.name &&
+            editProductObject.price &&
+            editProductObject.thumbnail){
+
             await products.deleteById(id);
             products.update(productObject,id);
-            products.sort()
-            res.send({"exito":`Producto con id ${id} actualizado`});
+            products.sort();
+            res.send({success:`Product labeled with id ${id} updated.`});
+
         }else{
-            res.send({"error":"faltan campos o estan erroneos (name, price, thumbnail)"})
+            res.send({error:"Some of the fields are empty or wrong."});
+
         }
     } 
 })
-//Api para borrar productos por id.
+
+/* DELETE() ELIMINAR PRODUCTO POR ID*/
 productsRouter.delete("/:id",(req,res)=>{
     const id = parseInt(req.params.id);
-    const productObj = products.getById(id)
-    if (productObj == false){
-        res.send({"error":`Producto con id ${id} no existe`})
+    const deleteProductObj = products.getById(id)
+    if (deleteProductObj == false){
+        res.send({error:`Product labeled with id ${id} does not exists.`})
+
     }else{
         products.deleteById(id);
-        res.send({"exito":`Producto con id ${id} eliminado`});
+        res.send({success:`Product labeled with id  ${id} deleted.`});
+
     }
 })
 
-/* RUTA DE NO EXIsTE */
-app.get("*",(req,res)=>res.send({"error":"No existe la ruta"}))
+/* RUTA GENERICA QUE NO EXISTE */
+app.get("*",(req,res)=>res.send({"error":"This path does not exists."}))
