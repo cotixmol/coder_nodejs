@@ -37,7 +37,6 @@ chatForm.addEventListener("submit",(e)=>{
         user: document.getElementById("chatFormMail").value,
         text: document.getElementById("chatFormText").value,
     }
-
     socket.emit("message",message)
 
     document.getElementById("chatFormMail").value="";

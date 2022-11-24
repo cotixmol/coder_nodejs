@@ -1,6 +1,9 @@
 /* IMPORTACIÓN CLASES */
 const {Contenedor} = require("./classes/Contenedor")
 const {Chat} = require("./classes/Chat")
+const {Cart} = require("./classes/Cart")
+const {Admin} = require("./classes/Admin")
+
 /* IMPORTACIÓN SERVIDORES */
 const express = require("express");
 const { Server } = require("socket.io");
@@ -39,13 +42,11 @@ app.set("view engine", "handlebars")
 
 /* INSTANCIACIÓN DE CLASES */
 let products = new Contenedor;
-const chat = new Chat
+const chat = new Chat;
+const cart = new Cart;
 
 /* ARRAYS CON VARIABLES ESTATICAS DE LA CLASE */
 let productList= Contenedor.productsList;
-
-/* WEBSOCKET SETUP */
-let productsListWS=[]
 
 io.on("connection",(socket)=>{
     /* FUNCIONALIDAD DE VISTA DE PRODUCTOS CON WEBSOCKETS */
@@ -80,6 +81,12 @@ app.get("/productos",async (req,res)=>{
 })
 
 /* RUTAS DE LA API DEL ROUTER DE CARRITO  */
+
+/* POST() NUEVO PRODUCTO */
+cartRouter.post("/",async (req,res)=>{
+    const creation = await cart.createCart();
+    res.send({success:creation})
+})
 
 /* RUTAS DE LA API DEL ROUTER DE PRODUCTOS  */
 /* GET() TODOS LOS PRODUCTOS */
