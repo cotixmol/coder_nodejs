@@ -84,8 +84,20 @@ app.get("/productos",async (req,res)=>{
 
 /* POST() NUEVO PRODUCTO */
 cartRouter.post("/",async (req,res)=>{
-    const creation = await cart.createCart();
-    res.send({success:creation})
+    await cart.createCart();
+    res.send({success:`Cart labeled with id: ${Cart.id} added.`})
+})
+
+cartRouter.delete("/:id",async (req,res)=>{
+    let id = parseInt(req.params.id);
+    let deletedCart = await cart.getById(id);
+
+    if (deletedCart.length != 0){
+        await cart.deleteCartById(id)
+        res.send({success:`Cart labeled with id: ${id} deleted.`})
+    }else{
+        res.send({error:`Cart labeled with id: ${id} does not exists.`})  
+    }
 })
 
 /* RUTAS DE LA API DEL ROUTER DE PRODUCTOS  */

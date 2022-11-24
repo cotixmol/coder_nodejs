@@ -9,13 +9,29 @@ class Cart{
                                 timestamp: Date.now(),
                                 products: [],
                             })
-            return(
-                `Cart labeled with id: ${Cart.id} added.`
-            ) 
         }catch{
             return Error("Error at Cart.save(cart)")
         }
     }
+
+    getById(id){
+        try{
+            const cartObj = Cart.CartList.filter(elm=>elm.id==id)
+            return cartObj
+        }catch{
+            return Error("Error en Cart.getById(id)")
+        }
+    }
+
+    deleteCartById(id){
+        try{
+            const CartListDeletedId = Cart.CartList.filter((elm)=>elm.id != id)
+            Cart.CartList = CartListDeletedId;
+        }catch{
+            return Error("Error en Cart.deleteById(id)")
+        }
+    }
+
 }
 
 module.exports= {Cart};
