@@ -22,7 +22,9 @@ body{
 .navInfText{
     font-size: small;
 }
-
+.inputDescription{
+    height: 20vh;
+}
 /* Personalización pantalla de mas de 600px de ancho */
 @media only screen and (min-width: 600px) {
     .divFormContainer {

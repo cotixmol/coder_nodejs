@@ -14,6 +14,10 @@ class Cart{
         }
     }
 
+    addProductToCart(cartId){
+        
+    }
+
     getById(id){
         try{
             const cartObj = Cart.CartList.filter(elm=>elm.id==id)

@@ -6,7 +6,9 @@ class Contenedor{
     save(product){
         try{
             Contenedor.id++
-            Contenedor.productsList.push({id:Contenedor.id,...product})
+            Contenedor.productsList.push({  id:Contenedor.id,
+                                            timestamp: Date.now(),
+                                            ...product})
         }catch{
             return Error("Error en Contenedor.save(object)")
         }

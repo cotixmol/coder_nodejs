@@ -100,6 +100,43 @@ cartRouter.delete("/:id",async (req,res)=>{
     }
 })
 
+cartRouter.get("/:id/productos",async(req,res)=>{
+    let id = parseInt(req.params.id);
+    let cartSelectedArray = await cart.getById(id);
+    let cartSelectedObject = cartSelectedArray[0]
+
+    console.log(cartSelectedObject.products)
+
+    if (cartSelectedArray.length != 0){
+        res.send({"Cart":`${id}`,
+                  "Products added in cart": cartSelectedObject.products})
+    }else{
+        res.send({error:`Cart labeled with id: ${id} does not exists.`})  
+    }
+})
+
+cartRouter.post("/:id/productos", async(req,res)=>{
+    let cartId = parseInt(req.params.id);
+    let cartSelectedArray = cart.getById(cartId)
+    let cartSelectedObj = cartSelectedArray[0]
+    let cartSelectedProductsArray = cartSelectedObj.products
+
+    let idProduct = parseInt(req.body.id);
+    let productSelectedArray = products.getById(idProduct)
+    let productSelectedObj = productSelectedArray[0]
+
+    if (cartSelectedArray.length != 0 &&
+        productSelectedArray.length != 0 &&
+        cartId == true &&
+        idProduct == true){
+            cartSelectedProductsArray.push({...productSelectedObj})
+            res.send({success:`Product with id: ${idProduct} added to cart ${cartId}`}) 
+    }else{
+
+            res.send({error:"No product was selected. It may not exist. Check body of request is 'id':'number'"}) 
+    }
+})
+
 /* RUTAS DE LA API DEL ROUTER DE PRODUCTOS  */
 /* GET() TODOS LOS PRODUCTOS */
 productsRouter.get("/",(req,res)=>{
@@ -122,7 +159,11 @@ productsRouter.post("/",(req,res)=>{
 
     if (newProductObject.name &&
         newProductObject.price &&
-        newProductObject.thumbnail){
+        newProductObject.thumbnail &&
+        newProductObject.description &&
+        newProductObject.code &&
+        newProductObject.stock){
+
         products.save(newProductObject);
         res.redirect("/");
 
