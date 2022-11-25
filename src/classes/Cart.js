@@ -15,13 +15,13 @@ class Cart{
     }
 
     addProductToCart(cartId){
-        
+
     }
 
     getById(id){
         try{
-            const cartObj = Cart.CartList.filter(elm=>elm.id==id)
-            return cartObj
+            const cartObjArray = Cart.CartList.filter(elm=>elm.id==id)
+            return cartObjArray
         }catch{
             return Error("Error en Cart.getById(id)")
         }
@@ -36,6 +36,10 @@ class Cart{
         }
     }
 
+    deleteProductInCart(id){
+        const cartProductsArrayIdDeleted = cartProductsArray.filter((elm)=>elm.id == id)
+        return cartProductsArrayIdDeleted
+    }
 }
 
 module.exports= {Cart};

@@ -105,8 +105,6 @@ cartRouter.get("/:id/productos",async(req,res)=>{
     let cartSelectedArray = await cart.getById(id);
     let cartSelectedObject = cartSelectedArray[0]
 
-    console.log(cartSelectedObject.products)
-
     if (cartSelectedArray.length != 0){
         res.send({"Cart":`${id}`,
                   "Products added in cart": cartSelectedObject.products})
@@ -122,19 +120,44 @@ cartRouter.post("/:id/productos", async(req,res)=>{
     let cartSelectedProductsArray = cartSelectedObj.products
 
     let idProduct = parseInt(req.body.id);
+    console.log(idProduct)
     let productSelectedArray = products.getById(idProduct)
     let productSelectedObj = productSelectedArray[0]
 
-    if (cartSelectedArray.length != 0 &&
-        productSelectedArray.length != 0 &&
-        cartId == true &&
-        idProduct == true){
-            cartSelectedProductsArray.push({...productSelectedObj})
+    console.log(cartSelectedArray.length != 0)
+    console.log(productSelectedArray.length != 0)
+    console.log(cartId == true)
+    console.log(idProduct == true)
+
+    if (cartSelectedArray.length != 0 && productSelectedArray.length != 0){
+            cartSelectedProductsArray.push(productSelectedObj)
             res.send({success:`Product with id: ${idProduct} added to cart ${cartId}`}) 
     }else{
 
             res.send({error:"No product was selected. It may not exist. Check body of request is 'id':'number'"}) 
     }
+})
+
+cartRouter.delete("/:id/productos/:id_prod", async(req,res)=>{
+    let cartId = parseInt(req.params.id);
+    let productId = parseInt(req.params.id_prod);
+
+    let cartObjArray = cart.getById(cartId)
+    let cartObj = cartObjArray[0]
+    let cartProductsArray = cartObj.products
+
+    if (cartObjArray.length == 0){
+        res.send({error:`Cart labeled with id ${cartId} does not exists.`})
+    }else if(cartProductsArray.length == 0){
+        res.send({error:`Product labeled with id ${productId} is not in cart ${cartId}.`})
+    }else{
+        cartProductsArray = products.deleteProductInCart(productId);
+        res.send({success:`Product labeled with id  ${id} deleted.`});
+    }
+
+
+    const cartProductsArrayIdDeleted = cart.deleteProductInCart(cartId,productId)
+
 })
 
 /* RUTAS DE LA API DEL ROUTER DE PRODUCTOS  */
