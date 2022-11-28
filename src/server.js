@@ -120,14 +120,8 @@ cartRouter.post("/:id/productos", async(req,res)=>{
     let cartSelectedProductsArray = cartSelectedObj.products
 
     let idProduct = parseInt(req.body.id);
-    console.log(idProduct)
     let productSelectedArray = products.getById(idProduct)
     let productSelectedObj = productSelectedArray[0]
-
-    console.log(cartSelectedArray.length != 0)
-    console.log(productSelectedArray.length != 0)
-    console.log(cartId == true)
-    console.log(idProduct == true)
 
     if (cartSelectedArray.length != 0 && productSelectedArray.length != 0){
             cartSelectedProductsArray.push(productSelectedObj)
@@ -151,13 +145,9 @@ cartRouter.delete("/:id/productos/:id_prod", async(req,res)=>{
     }else if(cartProductsArray.length == 0){
         res.send({error:`Product labeled with id ${productId} is not in cart ${cartId}.`})
     }else{
-        cartProductsArray = products.deleteProductInCart(productId);
-        res.send({success:`Product labeled with id  ${id} deleted.`});
+        Cart.CartList[cartId-1].products = cart.deleteProductInCart(productId,cartProductsArray);
+        res.send({success:`Product labeled with id  ${productId} in cart ${cartId} deleted.`});
     }
-
-
-    const cartProductsArrayIdDeleted = cart.deleteProductInCart(cartId,productId)
-
 })
 
 /* RUTAS DE LA API DEL ROUTER DE PRODUCTOS  */

@@ -14,10 +14,6 @@ class Cart{
         }
     }
 
-    addProductToCart(cartId){
-
-    }
-
     getById(id){
         try{
             const cartObjArray = Cart.CartList.filter(elm=>elm.id==id)
@@ -36,8 +32,8 @@ class Cart{
         }
     }
 
-    deleteProductInCart(id){
-        const cartProductsArrayIdDeleted = cartProductsArray.filter((elm)=>elm.id == id)
+    deleteProductInCart(id,cartProductArray){
+        const cartProductsArrayIdDeleted = cartProductArray.filter((elm)=>elm.id != id)
         return cartProductsArrayIdDeleted
     }
 }
