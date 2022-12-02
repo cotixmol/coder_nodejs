@@ -1,33 +1,17 @@
 import knex from "knex";
-import { options } from "../../options/mysqlConfig.js";
+import { options } from "../../options/contenedorMysqlConfig.js";
+
+import { createTableMysql } from "../../functions/createTableMysql.js";
+createTableMysql();
 
 const databaseContenedor = knex(options)
-
-const isTable = databaseContenedor.schema.hasTable("products");
-if(!isTable){
-    databaseContenedor.schema.createTable("products",(table)=>{
-        table.increments("id");
-        table.timestamp("timestamp")
-        table.string("name",50);
-        table.float("price");
-        table.string("thumbnail",1000);
-        table.string("description",1000);
-        table.string("code",20);
-        table.integer("stock");
-    })
-}
-
 class Contenedor{
-
-    // static id=0;
-
-
-    // static productsList = [];
-
-    save(product){
+    async save(product){
         try{
-            Contenedor.productsList.push({ timestamp: Date.now(),
-                                            ...product})
+            await databaseContenedor("products").insert({...product})
+            .then(()=>console.log("Producto Agregado"))
+            .catch((error)=>console.log(error))
+            .finally(()=>databaseContenedor.destroy())
         }catch{
             return Error("Error en Contenedor.save(object)")
         }
