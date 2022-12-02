@@ -6,4 +6,4 @@ class Chat{
     }
 }
 
-module.exports = {Chat}
+export {Chat}

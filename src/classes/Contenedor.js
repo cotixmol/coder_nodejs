@@ -1,13 +1,32 @@
+import knex from "knex";
+import { options } from "../../options/mysqlConfig.js";
+
+const databaseContenedor = knex(options)
+
+const isTable = databaseContenedor.schema.hasTable("products");
+if(!isTable){
+    databaseContenedor.schema.createTable("products",(table)=>{
+        table.increments("id");
+        table.timestamp("timestamp")
+        table.string("name",50);
+        table.float("price");
+        table.string("thumbnail",1000);
+        table.string("description",1000);
+        table.string("code",20);
+        table.integer("stock");
+    })
+}
+
 class Contenedor{
 
-    static id=0;
-    static productsList = [];
+    // static id=0;
+
+
+    // static productsList = [];
 
     save(product){
         try{
-            Contenedor.id++
-            Contenedor.productsList.push({  id:Contenedor.id,
-                                            timestamp: Date.now(),
+            Contenedor.productsList.push({ timestamp: Date.now(),
                                             ...product})
         }catch{
             return Error("Error en Contenedor.save(object)")
@@ -64,4 +83,4 @@ class Contenedor{
     }
 }
 
- module.exports= {Contenedor};
+ export {Contenedor};

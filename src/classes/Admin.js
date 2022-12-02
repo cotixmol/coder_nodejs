@@ -7,4 +7,4 @@ class Admin{
     }
 }
 
-module.exports= {Admin};
+export {Admin};

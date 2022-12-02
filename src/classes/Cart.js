@@ -38,4 +38,4 @@ class Cart{
     }
 }
 
-module.exports= {Cart};
+export {Cart};

@@ -1,19 +1,34 @@
 /* IMPORTACIÓN CLASES */
-const {Contenedor} = require("./classes/Contenedor")
-const {Chat} = require("./classes/Chat")
-const {Cart} = require("./classes/Cart")
-const {Admin} = require("./classes/Admin")
+import { Contenedor } from "./classes/Contenedor.js";
+import { Chat } from "./classes/Chat.js";
+import { Cart } from "./classes/Cart.js";
+import { Admin } from "./classes/Admin.js";
+
+// const {Contenedor} = require("./classes/Contenedor")
+// const {Chat} = require("./classes/Chat")
+// const {Cart} = require("./classes/Cart")
+// const {Admin} = require("./classes/Admin")
 
 /* IMPORTACIÓN SERVIDORES */
-const express = require("express");
-const { Server } = require("socket.io");
+import express from "express"
+import {Server} from "socket.io"
+
+// const express = require("express");
+// const { Server } = require("socket.io");
+
 /* IMPORTACIÓN OTROS MODULOS */
-const exhbs = require("express-handlebars")
-const path = require("path")
+import exhbs from "express-handlebars";
+import path from "path";
+import * as url from 'url';
+const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
+
+
+// const exhbs = require("express-handlebars")
+// const path = require("path")
 
 /* CONFIGURACION SERVIDOR */
 const app = express();
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 8081;
 const server = app.listen(PORT,()=>console.log(`Servidor ON en puerto ${PORT}`));
 
 /* CARPETA ARCHIVOS ESTATICOS */
