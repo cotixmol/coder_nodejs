@@ -205,18 +205,22 @@ productsRouter.post("/",(req,res)=>{
 productsRouter.put("/:id", async (req,res)=>{
     const id = parseInt(req.params.id);
     const editProductObject = req.body;
+    const productToUpdateArray = await products.getById(id);
+    
+    const doesProductToUpdateExists = (productToUpdateArray.length == 0)
 
-    if (products.getById(id) == false){
+    if (doesProductToUpdateExists){
         res.send({"error": "No hay producto para actualizar"});
 
     }else{
         if (editProductObject.name &&
             editProductObject.price &&
-            editProductObject.thumbnail){
+            editProductObject.thumbnail &&
+            editProductObject.description &&
+            editProductObject.code &&
+            editProductObject.stock){
 
-            await products.deleteById(id);
-            products.update(productObject,id);
-            products.sort();
+            products.update(editProductObject,id);
             res.send({success:`Product labeled with id ${id} updated.`});
 
         }else{

@@ -8,8 +8,8 @@ const databaseContenedor = knex(options)
 class Contenedor{
     async save(product){
         try{
-            await databaseContenedor("products").insert({...product})
-            .then(()=>console.log("Producto Agregado"))
+            await databaseContenedor("products").insert({timestamp:Date.now(),...product})
+            .then(()=>console.log("product added"))
             .catch((error)=>console.log(error))
             .finally(()=>databaseContenedor.destroy())
         }catch{
@@ -19,7 +19,11 @@ class Contenedor{
 
     update(product,id){
         try{
-            Contenedor.productsList.push({id:id,...product})
+            databaseContenedor.from("products").where("id",id).update({...product})
+            .then(()=>console.log("product updated"))
+            .catch((error)=>console.log(error))
+            // .finally(()=>databaseContenedor.destroy())
+
         }catch{
             return Error("Error en Contenedor.update(product,id)")
         }
@@ -36,10 +40,17 @@ class Contenedor{
         })
     }
 
-    getById(id){
+    async getById(id){
         try{
-            const productObj = Contenedor.productsList.filter(elm=>elm.id==id)
-            return productObj
+            let productoArray
+
+            await databaseContenedor.from("products").select("*").where("id",id)
+            .then((data)=>{
+                productoArray = data.map(elm=>({...elm}))
+            })
+            .catch((error)=>console.log(error))
+            // .finally(()=>databaseContenedor.destroy())
+            return productoArray;
         }catch{
             return Error("Error en Contenedor.getById(id)")
         }
