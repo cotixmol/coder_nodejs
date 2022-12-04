@@ -16,7 +16,6 @@ class Contenedor{
             return Error("Error en Contenedor.save(object)")
         }
     }
-
     update(product,id){
         try{
             databaseContenedor.from("products").where("id",id).update({...product})
@@ -28,39 +27,34 @@ class Contenedor{
             return Error("Error en Contenedor.update(product,id)")
         }
     }
-
-    sort(){
-        Contenedor.productsList.sort((a,b)=>{
-            if(a.id>b.id){
-                return 1
-            }
-            if(a.id<b.id){
-                return -1
-            }
-        })
-    }
-
     async getById(id){
         try{
-            let productoArray
+            let productArray
 
             await databaseContenedor.from("products").select("*").where("id",id)
             .then((data)=>{
-                productoArray = data.map(elm=>({...elm}))
+                productArray = data.map(elm=>({...elm}))
             })
             .catch((error)=>console.log(error))
             // .finally(()=>databaseContenedor.destroy())
-            return productoArray;
+            return productArray;
         }catch{
             return Error("Error en Contenedor.getById(id)")
         }
     }
-
-    getAll(){
+    async getAll(){
         try{
-            return Contenedor.productsList;
+            let productsArray
+
+            await databaseContenedor.from("products").select("*")
+            .then((data)=>{
+                productsArray = data.map(elm=>({...elm}))
+            })
+            .catch((error)=>console.log(error))
+            // .finally(()=>databaseContenedor.destroy())
+            return productsArray;
         }catch{
-            return Error("Error in Contenedor.getAll()")
+            return Error("Error en Contenedor.getById(id)")
         }
     }
 

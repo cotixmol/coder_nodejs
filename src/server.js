@@ -167,8 +167,8 @@ cartRouter.delete("/:id/productos/:id_prod", async(req,res)=>{
 
 /* RUTAS DE LA API DEL ROUTER DE PRODUCTOS  */
 /* GET() TODOS LOS PRODUCTOS */
-productsRouter.get("/",(req,res)=>{
-    res.send(products.getAll())
+productsRouter.get("/",async (req,res)=>{
+    res.send(await products.getAll())
 })
 
 /* GET() PRODUCTO DADO UN ID */
