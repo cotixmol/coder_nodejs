@@ -231,14 +231,15 @@ productsRouter.put("/:id", async (req,res)=>{
 })
 
 /* DELETE() ELIMINAR PRODUCTO POR ID*/
-productsRouter.delete("/:id",(req,res)=>{
+productsRouter.delete("/:id",async (req,res)=>{
     const id = parseInt(req.params.id);
-    const deleteProductObj = products.getById(id)
-    if (deleteProductObj == false){
+    const deleteProductObj = await products.getById(id)
+
+    if (deleteProductObj.length == 0){
         res.send({error:`Product labeled with id ${id} does not exists.`})
 
     }else{
-        products.deleteById(id);
+        await products.deleteById(id);
         res.send({success:`Product labeled with id  ${id} deleted.`});
 
     }

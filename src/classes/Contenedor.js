@@ -58,17 +58,26 @@ class Contenedor{
         }
     }
 
-    deleteById(id){
+    async deleteById(id){
         try{
-            const productsArrayDeletedId = Contenedor.productsList.filter((elm)=>elm.id != id)
-            Contenedor.productsList = productsArrayDeletedId;
+            await databaseContenedor.from("products").where("id",id).del()
+            .then(()=>console.log("data deleted"))
+            .catch((error)=>console.log(error))
+            // .finally(()=>databaseContenedor.destroy())
         }catch{
             return Error("Error en Contenedor.deleteById(id)")
         }
     }
  
     deleteAll(){
-        Contenedor.productsList = [];
+        try{
+            databaseContenedor.from("products").del()
+            .then(()=>console.log("data delete"))
+            .catch((error)=>console.log(error))
+            // .finally(()=>databaseContenedor.destroy())
+        }catch{
+            return Error("Error en Contenedor.deleteAll")
+        }
     }
 }
 
