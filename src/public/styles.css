@@ -85,6 +85,9 @@ body{
 
 /* FORM WS BLOCK */
 
+#divProductListWSOuterContainer{
+    margin-bottom: 15vh;
+}
 #divProductListWSContainer{
     display:flex;
     height: 5vh;

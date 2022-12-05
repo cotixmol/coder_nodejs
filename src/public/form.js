@@ -32,20 +32,22 @@ const chatMessagesContainer = document.getElementById("chatMessagesContainer")
 
 chatForm.addEventListener("submit",(e)=>{
     e.preventDefault();
+    
     const message = {
         date: new Date().toLocaleString(),
         user: document.getElementById("chatFormMail").value,
         text: document.getElementById("chatFormText").value,
     }
+
     socket.emit("message",message)
 
     document.getElementById("chatFormMail").value="";
     document.getElementById("chatFormText").value="";
 })
     
-socket.on("messagesListToClient",(data)=>{
+socket.on("messagesListToClient",(messagesArray)=>{
     let chatMessagesBlock = ""
-    data.forEach((elm)=>{
+    messagesArray.forEach((elm)=>{
         chatMessagesBlock += `<div class="divChatMessagesBlockContainer">
                                 <p class="chatDate">${elm.date}<p>
                                 <p class="chatUser">${elm.user}</p>

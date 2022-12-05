@@ -4,27 +4,15 @@ import { Chat } from "./classes/Chat.js";
 import { Cart } from "./classes/Cart.js";
 import { Admin } from "./classes/Admin.js";
 
-// const {Contenedor} = require("./classes/Contenedor")
-// const {Chat} = require("./classes/Chat")
-// const {Cart} = require("./classes/Cart")
-// const {Admin} = require("./classes/Admin")
-
 /* IMPORTACIÓN SERVIDORES */
 import express from "express"
 import {Server} from "socket.io"
-
-// const express = require("express");
-// const { Server } = require("socket.io");
 
 /* IMPORTACIÓN OTROS MODULOS */
 import exhbs from "express-handlebars";
 import path from "path";
 import * as url from 'url';
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
-
-
-// const exhbs = require("express-handlebars")
-// const path = require("path")
 
 /* CONFIGURACION SERVIDOR */
 const app = express();
@@ -60,17 +48,21 @@ let products = new Contenedor;
 const chat = new Chat;
 const cart = new Cart;
 
-/* ARRAYS CON VARIABLES ESTATICAS DE LA CLASE */
-let productList= Contenedor.productsList;
+/* LISTA DE PRODUCTOS PARA EL WEBSOCKET THE FORM */
+//No puedo hacer que se actualice esta variable.
+//Tengo que correr el server de nuevo para que se actualice
+//Socket.io anda porque el chat con sqlite anda bien.
+//Intente meterlo dentro del evento de connection pero me da error de conexion.
+let productsArray = await products.getAll()
 
 io.on("connection",(socket)=>{
     /* FUNCIONALIDAD DE VISTA DE PRODUCTOS CON WEBSOCKETS */
-    io.sockets.emit("productListToClient",productList)
+    io.sockets.emit("productListToClient", productsArray)
 
     /* FUNCIONALIDAD CHAT HECHO CON WEB SOCKETS */
-    socket.on("message",(data)=>{
-        chat.addMessage(data)
-        io.sockets.emit("messagesListToClient",Chat.messagesList)
+    socket.on("message",async (data)=>{
+        const messagesArray = await chat.addMessage(data)
+        io.sockets.emit("messagesListToClient",messagesArray)
     })
 })
 
@@ -83,14 +75,14 @@ app.get("/",(req,res)=>{
 
 /* PLANTILLA PRODUCTOS */
 app.get("/productos",async (req,res)=>{
-    if(await productList==false){
+    if(await products.getAll().length == 0){
         res.render("products",{
             error:"Nothing Yet",
             image:'<img src="images/nothingList.svg" alt="nothing in the list">'
         })
     }else{
         res.render("products",{
-            products:productList
+            products:await products.getAll()
         })
     }
 })
@@ -182,7 +174,7 @@ productsRouter.get("/:id",(req,res)=>{
 })
 
 /* POST() NUEVO PRODUCTO */
-productsRouter.post("/",(req,res)=>{
+productsRouter.post("/",async (req,res)=>{
     const newProductObject = req.body;
 
     if (newProductObject.name &&
@@ -191,7 +183,7 @@ productsRouter.post("/",(req,res)=>{
         newProductObject.description &&
         newProductObject.code &&
         newProductObject.stock){
-
+        
         products.save(newProductObject);
         res.redirect("/");
 

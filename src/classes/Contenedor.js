@@ -11,7 +11,6 @@ class Contenedor{
             await databaseContenedor("products").insert({timestamp:Date.now(),...product})
             .then(()=>console.log("product added"))
             .catch((error)=>console.log(error))
-            .finally(()=>databaseContenedor.destroy())
         }catch{
             return Error("Error en Contenedor.save(object)")
         }
@@ -21,8 +20,6 @@ class Contenedor{
             databaseContenedor.from("products").where("id",id).update({...product})
             .then(()=>console.log("product updated"))
             .catch((error)=>console.log(error))
-            // .finally(()=>databaseContenedor.destroy())
-
         }catch{
             return Error("Error en Contenedor.update(product,id)")
         }
@@ -30,18 +27,17 @@ class Contenedor{
     async getById(id){
         try{
             let productArray
-
             await databaseContenedor.from("products").select("*").where("id",id)
             .then((data)=>{
                 productArray = data.map(elm=>({...elm}))
             })
             .catch((error)=>console.log(error))
-            // .finally(()=>databaseContenedor.destroy())
             return productArray;
         }catch{
             return Error("Error en Contenedor.getById(id)")
         }
     }
+    
     async getAll(){
         try{
             let productsArray
@@ -51,7 +47,6 @@ class Contenedor{
                 productsArray = data.map(elm=>({...elm}))
             })
             .catch((error)=>console.log(error))
-            // .finally(()=>databaseContenedor.destroy())
             return productsArray;
         }catch{
             return Error("Error en Contenedor.getById(id)")
@@ -63,7 +58,6 @@ class Contenedor{
             await databaseContenedor.from("products").where("id",id).del()
             .then(()=>console.log("data deleted"))
             .catch((error)=>console.log(error))
-            // .finally(()=>databaseContenedor.destroy())
         }catch{
             return Error("Error en Contenedor.deleteById(id)")
         }
@@ -74,7 +68,6 @@ class Contenedor{
             databaseContenedor.from("products").del()
             .then(()=>console.log("data delete"))
             .catch((error)=>console.log(error))
-            // .finally(()=>databaseContenedor.destroy())
         }catch{
             return Error("Error en Contenedor.deleteAll")
         }
